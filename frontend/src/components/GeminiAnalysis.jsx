@@ -8,10 +8,14 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
   const [error, setError] = useState(null);
 
   const analyzeWithGemini = async () => {
-    if (!imageFile) return;
+    if (!imageFile) {
+      setError("No image file provided");
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
+    setAnalysis(null);
     
     try {
       const formData = new FormData();
@@ -30,8 +34,9 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
 
       console.log("✅ Gemini response received:", res.data);
 
-      if (res.data?.suggestions) {
+      if (res.data && res.data.suggestions) {
         setAnalysis(res.data.suggestions);
+        console.log("📝 Analysis set:", res.data.suggestions);
       } else {
         throw new Error("No suggestions received from AI");
       }
@@ -48,6 +53,7 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
   };
 
   useEffect(() => {
+    console.log("🔄 GeminiAnalysis component mounted with imageFile:", !!imageFile);
     if (imageFile) {
       analyzeWithGemini();
     }
@@ -56,8 +62,10 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
   const formatAnalysis = (text) => {
     if (!text) return [];
     
-    // Split by sections and format
-    const sections = text.split(/\*\*\d+\.\s+([^*]+):\*\*/);
+    console.log("📄 Formatting analysis text:", text.substring(0, 100) + "...");
+    
+    // Split by numbered sections with asterisks
+    const sections = text.split(/\*\*\d+\.\s*([^*]+):\*\*/);
     const formatted = [];
     
     for (let i = 1; i < sections.length; i += 2) {
@@ -67,16 +75,38 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
       if (title && content) {
         formatted.push({
           title: title.trim(),
-          content: content.trim()
+          content: content.trim().replace(/\*\*/g, '').replace(/\*/g, '•')
         });
       }
     }
     
-    // If no sections found, return as single block
+    // If no sections found, try alternative parsing
     if (formatted.length === 0) {
-      return [{ title: "AI Beauty Analysis", content: text }];
+      const lines = text.split('\n').filter(line => line.trim());
+      let currentSection = null;
+      
+      lines.forEach(line => {
+        if (line.includes('**') && line.includes(':')) {
+          // This is likely a section header
+          const title = line.replace(/\*\*/g, '').replace(/\d+\.\s*/, '').replace(':', '').trim();
+          currentSection = { title, content: '' };
+          formatted.push(currentSection);
+        } else if (currentSection && line.trim()) {
+          // Add content to current section
+          currentSection.content += line.replace(/\*/g, '•') + '\n';
+        }
+      });
     }
     
+    // Final fallback - return as single section
+    if (formatted.length === 0) {
+      return [{ 
+        title: "AI Beauty Analysis", 
+        content: text.replace(/\*\*/g, '').replace(/\*/g, '•') 
+      }];
+    }
+    
+    console.log("📋 Formatted sections:", formatted.length);
     return formatted;
   };
 

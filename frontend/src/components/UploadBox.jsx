@@ -148,7 +148,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
           className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform ${
             isLoading || !file || !username.trim()
               ? "bg-gray-400 cursor-not-allowed opacity-50"
-              : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 hover:scale-105 shadow-lg hover:shadow-xl"
+              : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 hover:scale-105 shadow-lg hover:shadow-xl active:scale-95"
           } text-white flex items-center justify-center space-x-2 sm:space-x-3`}
         >
           {isLoading ? (

@@ -36,6 +36,15 @@ export default function ResultCard({ score, imageFile }) {
     };
   }, [score]);
 
+  const handleGeminiAnalysis = () => {
+    console.log("🔍 Opening Gemini Analysis with imageFile:", !!imageFile);
+    setShowGeminiAnalysis(true);
+  };
+
+  const handleCloseGeminiAnalysis = () => {
+    console.log("❌ Closing Gemini Analysis");
+    setShowGeminiAnalysis(false);
+  };
   const getReaction = () => {
     if (score >= 4.5) return {
       text: "👑 ABSOLUTE ROYALTY! You're stunning! 🔥",
@@ -179,7 +188,7 @@ export default function ResultCard({ score, imageFile }) {
         <div className="space-y-3">
           {/* Gemini Analysis Button */}
           <button
-            onClick={() => setShowGeminiAnalysis(true)}
+            onClick={handleGeminiAnalysis}
             className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg text-sm sm:text-base"
           >
             <Brain className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -202,7 +211,7 @@ export default function ResultCard({ score, imageFile }) {
       {showGeminiAnalysis && (
         <GeminiAnalysis
           imageFile={imageFile}
-          onClose={() => setShowGeminiAnalysis(false)}
+          onClose={handleCloseGeminiAnalysis}
         />
       )}
     </>

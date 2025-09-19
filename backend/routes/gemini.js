@@ -69,9 +69,11 @@ router.post("/analyze", upload.single("image"), async (req, res) => {
     console.log("✅ Gemini AI analysis complete");
     console.log("📝 Gemini suggestions:", suggestions);
 
+    // Ensure we're sending a proper response structure
     res.json({
       suggestions,
       message: "Analysis complete!",
+      success: true
     });
   } catch (err) {
     console.error("❌ Gemini analysis error:", err);
@@ -83,6 +85,7 @@ router.post("/analyze", upload.single("image"), async (req, res) => {
     res.status(500).json({
       error: "Analysis failed. Please try again!",
       details: err.message,
+      success: false
     });
   }
 });
