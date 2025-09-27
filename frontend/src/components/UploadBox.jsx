@@ -64,7 +64,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
       formData.append("file", file);
       formData.append("username", username.trim());
 
-      const res = await axios.post("http://localhost:5001/api/predict", formData, {
+      const res = await axios.post("https://aesthetiq-beta.onrender.com/api/predict", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

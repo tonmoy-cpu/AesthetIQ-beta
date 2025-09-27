@@ -25,7 +25,7 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
 
       console.log("📤 Sending image to Gemini API...");
       const res = await axios.post(
-        "http://localhost:5001/api/gemini/analyze",
+        "https://aesthetiq-beta.onrender.com/api/gemini/analyze",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
