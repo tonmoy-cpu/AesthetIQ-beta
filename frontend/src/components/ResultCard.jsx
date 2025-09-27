@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Star, Crown, Heart, Sparkles, Trophy, Brain, Share2, Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, Crown, Heart, Sparkles, Trophy, Brain, Share2, Download, Zap, Target, Award } from "lucide-react";
 import Confetti from "react-confetti";
 import GeminiAnalysis from "./GeminiAnalysis";
 
@@ -10,13 +11,13 @@ export default function ResultCard({ score, imageFile }) {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    // Set window size for confetti
     setWindowSize({
       width: window.innerWidth,
       height: window.innerHeight
     });
 
     setShowConfetti(true);
+    
     // Animate score counting up
     const timer = setInterval(() => {
       setAnimatedScore(prev => {
@@ -28,7 +29,7 @@ export default function ResultCard({ score, imageFile }) {
       });
     }, 50);
 
-    const confettiTimer = setTimeout(() => setShowConfetti(false), 3000);
+    const confettiTimer = setTimeout(() => setShowConfetti(false), 4000);
     
     return () => {
       clearInterval(timer);
@@ -38,9 +39,6 @@ export default function ResultCard({ score, imageFile }) {
 
   const handleGeminiAnalysis = () => {
     console.log("🔍 Opening Gemini Analysis...");
-    console.log("📁 ImageFile available:", !!imageFile);
-    console.log("📁 ImageFile type:", imageFile?.type);
-    console.log("📁 ImageFile name:", imageFile?.name);
     setShowGeminiAnalysis(true);
   };
 
@@ -53,58 +51,72 @@ export default function ResultCard({ score, imageFile }) {
     if (score >= 4.5) return {
       text: "👑 ABSOLUTE ROYALTY! You're stunning! 🔥",
       color: "text-yellow-400",
-      bgColor: "from-yellow-400 to-orange-500",
+      bgGradient: "from-yellow-400 via-orange-500 to-red-500",
       icon: Crown,
       stars: 5,
-      level: "LEGENDARY"
+      level: "LEGENDARY",
+      particles: "👑✨🔥💎⭐",
+      description: "You've achieved the highest tier of beauty! Absolutely magnificent!"
     };
     if (score >= 4.0) return {
       text: "🌟 GORGEOUS! You're absolutely beautiful! ✨",
       color: "text-pink-400",
-      bgColor: "from-pink-400 to-purple-500",
+      bgGradient: "from-pink-400 via-purple-500 to-indigo-500",
       icon: Sparkles,
       stars: 5,
-      level: "MASTER"
+      level: "MASTER",
+      particles: "🌟💖✨🦋🌸",
+      description: "Outstanding beauty that captivates and inspires!"
     };
     if (score >= 3.5) return {
       text: "😍 STUNNING! Looking absolutely amazing! 💖",
       color: "text-purple-400",
-      bgColor: "from-purple-400 to-pink-500",
+      bgGradient: "from-purple-400 via-pink-500 to-rose-400",
       icon: Heart,
       stars: 4,
-      level: "EXPERT"
+      level: "EXPERT",
+      particles: "💖😍✨🌺💫",
+      description: "Remarkable beauty with incredible charm and appeal!"
     };
     if (score >= 3.0) return {
       text: "🌸 BEAUTIFUL! You have a lovely charm! 🌺",
       color: "text-rose-400",
-      bgColor: "from-rose-400 to-pink-400",
+      bgGradient: "from-rose-400 via-pink-400 to-purple-400",
       icon: Star,
       stars: 4,
-      level: "STAR"
+      level: "STAR",
+      particles: "🌸🌺✨💕🦋",
+      description: "Beautiful with natural grace and wonderful appeal!"
     };
     if (score >= 2.5) return {
       text: "😊 PRETTY! You have a sweet appeal! 🌷",
       color: "text-indigo-400",
-      bgColor: "from-indigo-400 to-purple-400",
+      bgGradient: "from-indigo-400 via-purple-400 to-pink-400",
       icon: Heart,
       stars: 3,
-      level: "RISING"
+      level: "RISING",
+      particles: "😊🌷✨💕🌟",
+      description: "Sweet and charming with delightful natural beauty!"
     };
     if (score >= 2.0) return {
       text: "🙂 NICE! You have your unique beauty! 🌻",
       color: "text-blue-400",
-      bgColor: "from-blue-400 to-indigo-400",
+      bgGradient: "from-blue-400 via-indigo-400 to-purple-400",
       icon: Star,
       stars: 3,
-      level: "UNIQUE"
+      level: "UNIQUE",
+      particles: "🙂🌻✨🌈💫",
+      description: "Unique beauty that stands out in its own special way!"
     };
     return {
       text: "😄 SPECIAL! Beauty comes in all forms! 🌈",
       color: "text-green-400",
-      bgColor: "from-green-400 to-blue-400",
+      bgGradient: "from-green-400 via-blue-400 to-purple-400",
       icon: Trophy,
       stars: 2,
-      level: "EXPLORER"
+      level: "EXPLORER",
+      particles: "😄🌈✨🌟💫",
+      description: "Every person has their own special kind of beauty!"
     };
   };
 
@@ -119,10 +131,28 @@ export default function ResultCard({ score, imageFile }) {
         url: window.location.href
       });
     } else {
-      // Fallback for browsers that don't support Web Share API
       navigator.clipboard.writeText(`I just got a ${score.toFixed(1)}/5.0 beauty score on AesthetIQ! 🌟 Check it out at ${window.location.href}`);
       alert('Score copied to clipboard! 📋');
     }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 50 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
   };
 
   return (
@@ -132,98 +162,179 @@ export default function ResultCard({ score, imageFile }) {
           width={windowSize.width}
           height={windowSize.height}
           recycle={false}
-          numberOfPieces={200}
+          numberOfPieces={300}
           gravity={0.3}
+          colors={['#00f5ff', '#ff00ff', '#ffff00', '#ff0080', '#8000ff']}
         />
       )}
       
-      <div className="bg-white/95 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8 text-center max-w-sm sm:max-w-md mx-auto transform hover:scale-105 transition-all duration-300">
-        {/* Level Badge */}
-        <div className={`inline-block bg-gradient-to-r ${reaction.bgColor} text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full mb-4`}>
-          LEVEL: {reaction.level}
-        </div>
+      <motion.div 
+        className="glass-card rounded-3xl shadow-2xl p-6 sm:p-8 text-center max-w-md mx-auto relative overflow-hidden"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        whileHover={{ scale: 1.02 }}
+      >
+        {/* Animated background */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${reaction.bgGradient} opacity-10 gradient-shift`}></div>
+        
+        <div className="relative z-10">
+          {/* Level Badge */}
+          <motion.div 
+            className={`inline-block bg-gradient-to-r ${reaction.bgGradient} text-white text-sm font-bold px-4 py-2 rounded-full mb-6 neon-glow`}
+            variants={itemVariants}
+            whileHover={{ scale: 1.1 }}
+          >
+            LEVEL: {reaction.level}
+          </motion.div>
 
-        {/* Animated Icon */}
-        <div className={`bg-gradient-to-r ${reaction.bgColor} w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-slow shadow-lg`}>
-          <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
-        </div>
+          {/* Animated Icon */}
+          <motion.div 
+            className={`bg-gradient-to-r ${reaction.bgGradient} w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg`}
+            variants={itemVariants}
+            animate={{
+              rotate: [0, 5, -5, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+          </motion.div>
 
-        {/* Score Display */}
-        <div className="mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Your Beauty Score</h2>
-          <div className={`text-4xl sm:text-6xl font-extrabold ${reaction.color} mb-2`}>
-            {animatedScore.toFixed(1)}
-            <span className="text-lg sm:text-2xl text-gray-500">/5.0</span>
-          </div>
-          
-          {/* Star Rating */}
-          <div className="flex justify-center space-x-1 mb-4">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                  i < reaction.stars
-                    ? "text-yellow-400 fill-current"
-                    : "text-gray-300"
-                }`}
-              />
+          {/* Score Display */}
+          <motion.div className="mb-6" variants={itemVariants}>
+            <h2 className="text-2xl font-bold text-white mb-3">Your Beauty Score</h2>
+            <div className={`text-6xl sm:text-7xl font-black ${reaction.color} mb-3 gradient-text-neon`}>
+              {animatedScore.toFixed(1)}
+              <span className="text-2xl text-gray-400">/5.0</span>
+            </div>
+            
+            {/* Star Rating */}
+            <motion.div 
+              className="flex justify-center space-x-1 mb-4"
+              variants={itemVariants}
+            >
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                >
+                  <Star
+                    className={`w-6 h-6 ${
+                      i < reaction.stars
+                        ? "text-yellow-400 fill-current neon-glow"
+                        : "text-gray-600"
+                    }`}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Reaction Text */}
+          <motion.div 
+            className="glass-card-pink rounded-2xl p-4 mb-6"
+            variants={itemVariants}
+          >
+            <p className="text-lg font-bold text-white mb-2">{reaction.text}</p>
+            <p className="text-gray-300 text-sm">{reaction.description}</p>
+          </motion.div>
+
+          {/* Stats Grid */}
+          <motion.div 
+            className="grid grid-cols-2 gap-4 text-sm mb-6"
+            variants={itemVariants}
+          >
+            <div className="glass-card rounded-xl p-3">
+              <div className="flex items-center justify-center mb-2">
+                <Target className="w-5 h-5 text-cyan-400 mr-2" />
+                <p className="font-bold text-cyan-400">Confidence</p>
+              </div>
+              <p className="text-white text-lg font-bold">{Math.round(score * 20)}%</p>
+            </div>
+            <div className="glass-card rounded-xl p-3">
+              <div className="flex items-center justify-center mb-2">
+                <Zap className="w-5 h-5 text-pink-400 mr-2" />
+                <p className="font-bold text-pink-400">Charm Level</p>
+              </div>
+              <p className="text-white text-lg font-bold">{score >= 4 ? "MAX" : "HIGH"}</p>
+            </div>
+          </motion.div>
+
+          {/* Action Buttons */}
+          <motion.div className="space-y-4" variants={itemVariants}>
+            {/* Gemini Analysis Button */}
+            <motion.button
+              onClick={handleGeminiAnalysis}
+              disabled={!imageFile}
+              className={`w-full font-bold py-4 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg relative overflow-hidden ${
+                !imageFile 
+                  ? "bg-gray-600 cursor-not-allowed opacity-50 text-white" 
+                  : "btn-neon text-white"
+              }`}
+              whileHover={imageFile ? { scale: 1.05 } : {}}
+              whileTap={imageFile ? { scale: 0.95 } : {}}
+            >
+              <Brain className="w-6 h-6" />
+              <span>Analyze with Gemini AI</span>
+              <Sparkles className="w-5 h-5 animate-pulse" />
+            </motion.button>
+
+            {/* Share Button */}
+            <motion.button
+              onClick={shareScore}
+              className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg neon-pulse"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Share2 className="w-5 h-5" />
+              <span>Share My Score</span>
+            </motion.button>
+          </motion.div>
+
+          {/* Floating Particles */}
+          <div className="absolute inset-0 pointer-events-none">
+            {reaction.particles.split('').map((particle, index) => (
+              <motion.div
+                key={index}
+                className="absolute text-2xl"
+                initial={{ 
+                  x: Math.random() * 300,
+                  y: Math.random() * 400,
+                  opacity: 0 
+                }}
+                animate={{
+                  y: [null, -50, -100],
+                  opacity: [0, 1, 0],
+                  rotate: [0, 360]
+                }}
+                transition={{
+                  duration: 3,
+                  delay: index * 0.5,
+                  repeat: Infinity,
+                  repeatDelay: 2
+                }}
+              >
+                {particle}
+              </motion.div>
             ))}
           </div>
         </div>
+      </motion.div>
 
-        {/* Reaction Text */}
-        <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-4 sm:mb-6">
-          <p className="text-base sm:text-lg font-semibold text-gray-800">{reaction.text}</p>
-        </div>
-
-        {/* Fun Stats */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 text-sm mb-4 sm:mb-6">
-          <div className="bg-blue-50 rounded-lg sm:rounded-xl p-3">
-            <p className="font-bold text-blue-600 text-xs sm:text-sm">Confidence</p>
-            <p className="text-blue-800 text-sm sm:text-base">{Math.round(score * 20)}%</p>
-          </div>
-          <div className="bg-pink-50 rounded-lg sm:rounded-xl p-3">
-            <p className="font-bold text-pink-600 text-xs sm:text-sm">Charm Level</p>
-            <p className="text-pink-800 text-sm sm:text-base">{score >= 4 ? "MAX" : "HIGH"}</p>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="space-y-3">
-          {/* Gemini Analysis Button */}
-          <button
-            onClick={handleGeminiAnalysis}
-            disabled={!imageFile}
-            className={`w-full font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg text-sm sm:text-base ${
-              !imageFile 
-                ? "bg-gray-400 cursor-not-allowed opacity-50 text-white" 
-                : "bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white"
-            }`}
-          >
-            <Brain className="w-5 h-5 sm:w-6 sm:h-6" />
-            <span>Analyze with Gemini AI</span>
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
-          </button>
-
-          {/* Share Button */}
-          <button
-            onClick={shareScore}
-            className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 shadow-lg text-sm"
-          >
-            <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Share My Score</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Gemini Analysis Modal - This should render outside the main card */}
+      {/* Gemini Analysis Modal */}
       {showGeminiAnalysis && imageFile && (
         <GeminiAnalysis
           imageFile={imageFile}
           onClose={handleCloseGeminiAnalysis}
         />
       )}
-      
     </>
   );
 }

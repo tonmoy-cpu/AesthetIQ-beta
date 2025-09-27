@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Camera, Loader, Sparkles, Upload, Image } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Camera, Loader, Sparkles, Upload, Image, Zap, CheckCircle, AlertCircle } from "lucide-react";
 import axios from "axios";
 
 export default function UploadBox({ setScore, isLoading, setIsLoading }) {
@@ -8,6 +9,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
   const [username, setUsername] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -44,6 +46,19 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
     }
 
     setIsLoading(true);
+    setUploadProgress(0);
+
+    // Simulate upload progress
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + Math.random() * 15;
+      });
+    }, 200);
+
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -53,49 +68,88 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setScore({ score: res.data.score, imageFile: uploadedFile });
+      setUploadProgress(100);
+      setTimeout(() => {
+        setScore({ score: res.data.score, imageFile: uploadedFile });
+      }, 500);
     } catch (error) {
       console.error("Upload error:", error);
       alert("Oops! Something went wrong. Please try again! 😅");
     } finally {
-      setIsLoading(false);
+      clearInterval(progressInterval);
+      setTimeout(() => {
+        setIsLoading(false);
+        setUploadProgress(0);
+      }, 1000);
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="bg-white/20 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 w-full max-w-lg mx-auto border border-white/30 shadow-2xl">
-      <div className="space-y-4 sm:space-y-6">
+    <motion.div 
+      className="glass-card rounded-3xl p-6 sm:p-8 w-full max-w-lg mx-auto border-2 border-cyan-400/20 shadow-2xl relative overflow-hidden"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{ 
+        borderColor: "rgba(0, 245, 255, 0.4)",
+        boxShadow: "0 0 30px rgba(0, 245, 255, 0.2)"
+      }}
+    >
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 gradient-shift"></div>
+      
+      <div className="relative z-10 space-y-6">
         {/* Username Input */}
-        <div>
-          <label className="block text-white font-semibold mb-2 text-base sm:text-lg">
-            ✨ What's your name?
+        <motion.div variants={itemVariants}>
+          <label className="block text-white font-semibold mb-3 text-lg flex items-center">
+            <Sparkles className="w-5 h-5 text-cyan-400 mr-2" />
+            What's your name?
           </label>
-          <input
+          <motion.input
             type="text"
             placeholder="Enter your awesome name"
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border-2 border-white/30 bg-white/10 text-white placeholder-white/60 focus:outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-300/50 transition-all text-sm sm:text-base"
+            className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition-all backdrop-blur-sm"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             disabled={isLoading}
+            whileFocus={{ scale: 1.02 }}
           />
-        </div>
+        </motion.div>
 
         {/* File Upload Area */}
-        <div>
-          <label className="block text-white font-semibold mb-2 text-base sm:text-lg">
-            📸 Upload your photo
+        <motion.div variants={itemVariants}>
+          <label className="block text-white font-semibold mb-3 text-lg flex items-center">
+            <Camera className="w-5 h-5 text-pink-400 mr-2" />
+            Upload your photo
           </label>
-          <div
-            className={`relative border-2 border-dashed rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-10 text-center transition-all cursor-pointer min-h-[200px] sm:min-h-[240px] lg:min-h-[280px] flex flex-col items-center justify-center ${
+          
+          <motion.div
+            className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer min-h-[280px] flex flex-col items-center justify-center ${
               dragActive
-                ? "border-yellow-300 bg-yellow-300/10 scale-105"
-                : "border-white/40 hover:border-white/60 hover:bg-white/5"
+                ? "border-cyan-400 bg-cyan-400/10 scale-105"
+                : "border-white/30 hover:border-white/50 hover:bg-white/5"
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
             onClick={() => document.getElementById("fileInput").click()}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             <input
               id="fileInput"
@@ -106,71 +160,153 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
               disabled={isLoading}
             />
 
-            {preview ? (
-              <div className="space-y-4">
-                <div className="relative">
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-cover rounded-2xl mx-auto border-4 border-white/50 shadow-lg"
-                  />
-                  <div className="absolute -top-2 -right-2 bg-green-500 rounded-full p-1">
-                    <Camera className="w-4 h-4 text-white" />
+            <AnimatePresence mode="wait">
+              {preview ? (
+                <motion.div 
+                  className="space-y-4"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="relative">
+                    <motion.img
+                      src={preview}
+                      alt="Preview"
+                      className="w-32 h-32 lg:w-40 lg:h-40 object-cover rounded-2xl mx-auto border-4 border-cyan-400/50 shadow-lg"
+                      whileHover={{ scale: 1.05 }}
+                    />
+                    <motion.div 
+                      className="absolute -top-2 -right-2 bg-gradient-to-r from-green-400 to-cyan-400 rounded-full p-2"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <CheckCircle className="w-5 h-5 text-white" />
+                    </motion.div>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-white/90 font-medium text-sm sm:text-base">Looking great! Ready to predict? 🌟</p>
-                  <p className="text-white/70 text-xs sm:text-sm">{file?.name}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="relative">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Upload className="w-8 h-8 sm:w-10 sm:h-10 text-white/60" />
+                  <div className="space-y-2">
+                    <p className="text-white font-medium text-base">Looking great! Ready to predict? 🌟</p>
+                    <p className="text-gray-300 text-sm">{file?.name}</p>
                   </div>
-                  <Image className="w-6 h-6 sm:w-8 sm:h-8 text-white/40 absolute -bottom-1 -right-1" />
-                </div>
-                <div className="space-y-2">
-                  <p className="text-white font-medium text-base sm:text-lg">Drop your photo here</p>
-                  <p className="text-white/60 text-sm sm:text-base">or click to browse</p>
-                  <p className="text-white/50 text-xs sm:text-sm">Supports JPG, PNG, WEBP</p>
-                </div>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  className="space-y-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <motion.div 
+                    className="relative"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="w-20 h-20 bg-gradient-to-br from-cyan-400/20 to-pink-400/20 rounded-full flex items-center justify-center mx-auto mb-2 neon-glow">
+                      <Upload className="w-10 h-10 text-cyan-400" />
+                    </div>
+                    <Image className="w-8 h-8 text-pink-400 absolute -bottom-1 -right-1" />
+                  </motion.div>
+                  <div className="space-y-3">
+                    <p className="text-white font-semibold text-lg">Drop your photo here</p>
+                    <p className="text-gray-300 text-base">or click to browse</p>
+                    <div className="flex items-center justify-center space-x-4 text-sm text-gray-400">
+                      <span>JPG</span>
+                      <span>•</span>
+                      <span>PNG</span>
+                      <span>•</span>
+                      <span>WEBP</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </motion.div>
+
+        {/* Upload Progress */}
+        <AnimatePresence>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="space-y-3"
+            >
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-300">Analyzing...</span>
+                <span className="text-cyan-400 font-semibold">{Math.round(uploadProgress)}%</span>
               </div>
-            )}
-          </div>
-        </div>
+              <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-cyan-400 to-pink-400 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${uploadProgress}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Upload Button */}
-        <button
+        <motion.button
           onClick={handleUpload}
           disabled={isLoading || !file || !username.trim()}
-          className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 transform ${
+          className={`w-full py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 transform relative overflow-hidden ${
             isLoading || !file || !username.trim()
-              ? "bg-gray-400 cursor-not-allowed opacity-50"
-              : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 hover:scale-105 shadow-lg hover:shadow-xl active:scale-95"
-          } text-white flex items-center justify-center space-x-2 sm:space-x-3`}
+              ? "bg-gray-600 cursor-not-allowed opacity-50"
+              : "btn-neon text-white hover:scale-105 shadow-lg hover:shadow-cyan-400/25"
+          } flex items-center justify-center space-x-3`}
+          variants={itemVariants}
+          whileHover={!isLoading && file && username.trim() ? { scale: 1.05 } : {}}
+          whileTap={!isLoading && file && username.trim() ? { scale: 0.95 } : {}}
         >
-          {isLoading ? (
-            <>
-              <Loader className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
-              <span>Analyzing your beauty... ✨</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
-              <span>Predict My Beauty Score! 🎭</span>
-            </>
-          )}
-        </button>
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center space-x-3"
+              >
+                <Loader className="w-6 h-6 animate-spin" />
+                <span>Analyzing your beauty...</span>
+                <Zap className="w-5 h-5 animate-pulse" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="ready"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center space-x-3"
+              >
+                <Sparkles className="w-6 h-6" />
+                <span>Predict My Beauty Score!</span>
+                <Camera className="w-5 h-5" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
 
-        {/* Tips */}
-        <div className="bg-white/10 rounded-lg sm:rounded-xl p-3 sm:p-4">
-          <p className="text-white/80 text-xs sm:text-sm text-center">
-            💡 <strong>Pro Tips:</strong> Use good lighting, face the camera directly, and smile naturally for best results!
-          </p>
-        </div>
+        {/* Pro Tips */}
+        <motion.div 
+          className="glass-card-pink rounded-xl p-4"
+          variants={itemVariants}
+        >
+          <div className="flex items-start space-x-3">
+            <Zap className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-white font-semibold text-sm mb-1">Pro Tips:</p>
+              <p className="text-gray-300 text-xs leading-relaxed">
+                Use good lighting, face the camera directly, and smile naturally for best results!
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
