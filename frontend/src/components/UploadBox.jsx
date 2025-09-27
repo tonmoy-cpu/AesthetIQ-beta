@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, Loader, Sparkles, Upload, Image, Zap, CircleCheck as CheckCircle, CircleAlert as AlertCircle } from "lucide-react";
+import { Camera, Loader, Sparkles, Upload, Zap, CircleCheck as CheckCircle, CircleAlert as AlertCircle } from "lucide-react";
 import axios from "axios";
 
 export default function UploadBox({ setScore, isLoading, setIsLoading }) {
@@ -115,8 +115,8 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
       <div className="relative z-10 space-y-6">
         {/* Username Input */}
         <motion.div variants={itemVariants}>
-          <label className="block text-white font-semibold mb-3 text-lg flex items-center">
-            <Sparkles className="w-5 h-5 text-cyan-400 mr-2" />
+          <label className="block text-white font-semibold mb-6 text-lg flex items-center">
+            <Sparkles className="w-3 h-3 text-cyan-400 mr-2" />
             What's your name?
           </label>
           <motion.input
@@ -205,7 +205,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
                     <div className="w-20 h-20 bg-gradient-to-br from-cyan-400/20 to-pink-400/20 rounded-full flex items-center justify-center mx-auto mb-2 neon-glow">
                       <Upload className="w-10 h-10 text-cyan-400" />
                     </div>
-                    <Image className="w-8 h-8 text-pink-400 absolute -bottom-1 -right-1" />
+                    {/* <Image className="w-8 h-8 text-pink-400 absolute -bottom-1 -right-1" /> */}
                   </motion.div>
                   <div className="space-y-3">
                     <p className="text-white font-semibold text-lg">Drop your photo here</p>
