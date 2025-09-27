@@ -169,28 +169,28 @@ export default function ResultCard({ score, imageFile }) {
       )}
       
       <motion.div 
-        className="glass-card rounded-3xl shadow-2xl p-6 sm:p-8 text-center max-w-md mx-auto relative overflow-hidden"
+        className="glass-card rounded-3xl shadow-2xl p-8 text-center w-full max-w-md relative overflow-hidden"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        whileHover={{ scale: 1.02 }}
+        whileHover={{ scale: 1.01 }}
       >
         {/* Animated background */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${reaction.bgGradient} opacity-10 gradient-shift`}></div>
+        <div className={`absolute inset-0 bg-gradient-to-br ${reaction.bgGradient} opacity-5 gradient-shift`}></div>
         
         <div className="relative z-10">
           {/* Level Badge */}
           <motion.div 
-            className={`inline-block bg-gradient-to-r ${reaction.bgGradient} text-white text-sm font-bold px-4 py-2 rounded-full mb-6 neon-glow`}
+            className={`inline-block bg-gradient-to-r ${reaction.bgGradient} text-white text-sm font-bold px-6 py-3 rounded-full mb-8 neon-glow font-poppins`}
             variants={itemVariants}
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.05 }}
           >
             LEVEL: {reaction.level}
           </motion.div>
 
           {/* Animated Icon */}
           <motion.div 
-            className={`bg-gradient-to-r ${reaction.bgGradient} w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg`}
+            className={`bg-gradient-to-r ${reaction.bgGradient} w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg`}
             variants={itemVariants}
             animate={{
               rotate: [0, 5, -5, 0],
@@ -202,20 +202,20 @@ export default function ResultCard({ score, imageFile }) {
               ease: "easeInOut"
             }}
           >
-            <IconComponent className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+            <IconComponent className="w-12 h-12 text-white" />
           </motion.div>
 
           {/* Score Display */}
-          <motion.div className="mb-6" variants={itemVariants}>
-            <h2 className="text-2xl font-bold text-white mb-3">Your Beauty Score</h2>
-            <div className={`text-6xl sm:text-7xl font-black ${reaction.color} mb-3 gradient-text-neon`}>
+          <motion.div className="mb-8" variants={itemVariants}>
+            <h2 className="text-2xl font-bold text-white mb-4 font-poppins">Your Beauty Score</h2>
+            <div className={`text-6xl font-black ${reaction.color} mb-4 gradient-text-neon font-poppins`}>
               {animatedScore.toFixed(1)}
-              <span className="text-2xl text-gray-400">/5.0</span>
+              <span className="text-3xl text-gray-400">/5.0</span>
             </div>
             
             {/* Star Rating */}
             <motion.div 
-              className="flex justify-center space-x-1 mb-4"
+              className="flex justify-center space-x-2 mb-6"
               variants={itemVariants}
             >
               {[...Array(5)].map((_, i) => (
@@ -226,7 +226,7 @@ export default function ResultCard({ score, imageFile }) {
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                 >
                   <Star
-                    className={`w-6 h-6 ${
+                    className={`w-7 h-7 ${
                       i < reaction.stars
                         ? "text-yellow-400 fill-current neon-glow"
                         : "text-gray-600"
@@ -239,46 +239,46 @@ export default function ResultCard({ score, imageFile }) {
 
           {/* Reaction Text */}
           <motion.div 
-            className="glass-card-pink rounded-2xl p-4 mb-6"
+            className="glass-card-pink rounded-2xl p-6 mb-8"
             variants={itemVariants}
           >
-            <p className="text-lg font-bold text-white mb-2">{reaction.text}</p>
-            <p className="text-gray-300 text-sm">{reaction.description}</p>
+            <p className="text-lg font-bold text-white mb-3 font-poppins">{reaction.text}</p>
+            <p className="text-gray-300 text-sm font-inter leading-relaxed">{reaction.description}</p>
           </motion.div>
 
           {/* Stats Grid */}
           <motion.div 
-            className="grid grid-cols-2 gap-4 text-sm mb-6"
+            className="grid grid-cols-2 gap-4 mb-8"
             variants={itemVariants}
           >
-            <div className="glass-card rounded-xl p-3">
-              <div className="flex items-center justify-center mb-2">
-                <Target className="w-5 h-5 text-cyan-400 mr-2" />
-                <p className="font-bold text-cyan-400">Confidence</p>
+            <div className="glass-card rounded-xl p-4 text-center">
+              <div className="flex items-center justify-center mb-3">
+                <Target className="w-6 h-6 text-cyan-400 mr-2" />
+                <p className="font-bold text-cyan-400 font-poppins text-sm">Confidence</p>
               </div>
-              <p className="text-white text-lg font-bold">{Math.round(score * 20)}%</p>
+              <p className="text-white text-xl font-bold font-poppins">{Math.round(score * 20)}%</p>
             </div>
-            <div className="glass-card rounded-xl p-3">
-              <div className="flex items-center justify-center mb-2">
-                <Zap className="w-5 h-5 text-pink-400 mr-2" />
-                <p className="font-bold text-pink-400">Charm Level</p>
+            <div className="glass-card rounded-xl p-4 text-center">
+              <div className="flex items-center justify-center mb-3">
+                <Zap className="w-6 h-6 text-pink-400 mr-2" />
+                <p className="font-bold text-pink-400 font-poppins text-sm">Charm Level</p>
               </div>
-              <p className="text-white text-lg font-bold">{score >= 4 ? "MAX" : "HIGH"}</p>
+              <p className="text-white text-xl font-bold font-poppins">{score >= 4 ? "MAX" : "HIGH"}</p>
             </div>
           </motion.div>
 
           {/* Action Buttons */}
-          <motion.div className="space-y-4" variants={itemVariants}>
+          <motion.div className="space-y-6" variants={itemVariants}>
             {/* Gemini Analysis Button */}
             <motion.button
               onClick={handleGeminiAnalysis}
               disabled={!imageFile}
-              className={`w-full font-bold py-4 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg relative overflow-hidden ${
+              className={`w-full font-bold py-4 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg relative overflow-hidden font-poppins ${
                 !imageFile 
                   ? "bg-gray-600 cursor-not-allowed opacity-50 text-white" 
                   : "btn-neon text-white"
               }`}
-              whileHover={imageFile ? { scale: 1.05 } : {}}
+              whileHover={imageFile ? { scale: 1.02 } : {}}
               whileTap={imageFile ? { scale: 0.95 } : {}}
             >
               <Brain className="w-6 h-6" />
@@ -289,11 +289,11 @@ export default function ResultCard({ score, imageFile }) {
             {/* Share Button */}
             <motion.button
               onClick={shareScore}
-              className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg neon-pulse"
-              whileHover={{ scale: 1.05 }}
+              className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-3 shadow-lg neon-pulse font-poppins"
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Share2 className="w-5 h-5" />
+              <Share2 className="w-6 h-6" />
               <span>Share My Score</span>
             </motion.button>
           </motion.div>

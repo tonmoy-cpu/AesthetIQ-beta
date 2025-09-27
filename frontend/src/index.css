@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', 'Poppins', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: dark;
@@ -23,6 +23,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background: #0a0a0f;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Custom scrollbar - Neon theme */
@@ -122,17 +123,17 @@ body {
 
 /* Glassmorphism effects */
 .glass-card {
-  background: rgba(15, 15, 25, 0.7);
+  background: rgba(15, 15, 25, 0.8);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 245, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .glass-card-pink {
-  background: rgba(25, 15, 25, 0.7);
+  background: rgba(25, 15, 25, 0.8);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 0, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(255, 0, 255, 0.1);
+  border: 1px solid rgba(255, 0, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(255, 0, 255, 0.15);
 }
 
 /* Gradient text effects */
@@ -156,7 +157,7 @@ body {
 
 /* Button effects */
 .btn-neon {
-  background: linear-gradient(45deg, rgba(0, 245, 255, 0.1), rgba(255, 0, 255, 0.1));
+  background: linear-gradient(45deg, rgba(0, 245, 255, 0.15), rgba(255, 0, 255, 0.15));
   border: 2px solid transparent;
   background-clip: padding-box;
   position: relative;
@@ -178,7 +179,7 @@ body {
 
 .btn-neon:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 245, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 245, 255, 0.25);
 }
 
 /* Cyber grid background */
@@ -205,14 +206,29 @@ body {
 @media (max-width: 640px) {
   html { font-size: 14px; }
   .glass-card { backdrop-filter: blur(15px); }
+  
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   html { font-size: 15px; }
+  
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
 @media (min-width: 1025px) {
   html { font-size: 16px; }
+  
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 /* Enhanced focus styles */
@@ -232,6 +248,18 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
   button {
     min-height: 48px;
     min-width: 48px;
+  }
+  
+  .glass-card {
+    margin: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
   }
 }
 

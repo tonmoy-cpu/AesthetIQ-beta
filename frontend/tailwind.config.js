@@ -7,8 +7,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'poppins': ['Poppins', 'sans-serif'],
-        'inter': ['Inter', 'sans-serif'],
+        'poppins': ['Poppins', 'system-ui', 'sans-serif'],
+        'inter': ['Inter', 'system-ui', 'sans-serif'],
+        'sans': ['Inter', 'Poppins', 'system-ui', 'sans-serif'],
       },
       colors: {
         'neon-cyan': '#00f5ff',
@@ -85,6 +86,21 @@ export default {
       },
       backgroundSize: {
         'grid': '50px 50px',
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+          xl: '2.5rem',
+          '2xl': '3rem',
+        },
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
       },
     },
   },

@@ -100,7 +100,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
 
   return (
     <motion.div 
-      className="glass-card rounded-3xl p-6 sm:p-8 w-full max-w-lg mx-auto border-2 border-cyan-400/20 shadow-2xl relative overflow-hidden"
+      className="glass-card rounded-3xl p-8 w-full border-2 border-cyan-400/20 shadow-2xl relative overflow-hidden"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -110,19 +110,19 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
       }}
     >
       {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 gradient-shift"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/3 via-purple-500/3 to-pink-500/3 gradient-shift"></div>
       
-      <div className="relative z-10 space-y-6">
+      <div className="relative z-10 space-y-8">
         {/* Username Input */}
         <motion.div variants={itemVariants}>
-          <label className="block text-white font-semibold mb-6 text-lg flex items-center">
-            <Sparkles className="w-3 h-3 text-cyan-400 mr-2" />
+          <label className="block text-white font-semibold mb-4 text-lg font-poppins flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-cyan-400 mr-3" />
             What's your name?
           </label>
           <motion.input
             type="text"
             placeholder="Enter your awesome name"
-            className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition-all backdrop-blur-sm"
+            className="w-full px-6 py-4 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 transition-all backdrop-blur-sm font-inter text-center"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             disabled={isLoading}
@@ -132,13 +132,13 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
 
         {/* File Upload Area */}
         <motion.div variants={itemVariants}>
-          <label className="block text-white font-semibold mb-3 text-lg flex items-center">
-            <Camera className="w-5 h-5 text-pink-400 mr-2" />
+          <label className="block text-white font-semibold mb-4 text-lg font-poppins flex items-center justify-center">
+            <Camera className="w-5 h-5 text-pink-400 mr-3" />
             Upload your photo
           </label>
           
           <motion.div
-            className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer min-h-[280px] flex flex-col items-center justify-center ${
+            className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer min-h-[320px] flex flex-col items-center justify-center ${
               dragActive
                 ? "border-cyan-400 bg-cyan-400/10 scale-105"
                 : "border-white/30 hover:border-white/50 hover:bg-white/5"
@@ -163,7 +163,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
             <AnimatePresence mode="wait">
               {preview ? (
                 <motion.div 
-                  className="space-y-4"
+                  className="space-y-6 flex flex-col items-center"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
@@ -173,7 +173,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
                     <motion.img
                       src={preview}
                       alt="Preview"
-                      className="w-32 h-32 lg:w-40 lg:h-40 object-cover rounded-2xl mx-auto border-4 border-cyan-400/50 shadow-lg"
+                      className="w-40 h-40 lg:w-48 lg:h-48 object-cover rounded-2xl border-4 border-cyan-400/50 shadow-lg"
                       whileHover={{ scale: 1.05 }}
                     />
                     <motion.div 
@@ -185,14 +185,14 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
                       <CheckCircle className="w-5 h-5 text-white" />
                     </motion.div>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-white font-medium text-base">Looking great! Ready to predict? 🌟</p>
-                    <p className="text-gray-300 text-sm">{file?.name}</p>
+                  <div className="space-y-3 text-center">
+                    <p className="text-white font-semibold text-lg font-poppins">Looking great! Ready to predict? 🌟</p>
+                    <p className="text-gray-300 text-sm font-inter truncate max-w-xs">{file?.name}</p>
                   </div>
                 </motion.div>
               ) : (
                 <motion.div 
-                  className="space-y-6"
+                  className="space-y-8 flex flex-col items-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -202,15 +202,14 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="w-20 h-20 bg-gradient-to-br from-cyan-400/20 to-pink-400/20 rounded-full flex items-center justify-center mx-auto mb-2 neon-glow">
+                    <div className="w-24 h-24 bg-gradient-to-br from-cyan-400/20 to-pink-400/20 rounded-full flex items-center justify-center neon-glow">
                       <Upload className="w-10 h-10 text-cyan-400" />
                     </div>
-                    {/* <Image className="w-8 h-8 text-pink-400 absolute -bottom-1 -right-1" /> */}
                   </motion.div>
-                  <div className="space-y-3">
-                    <p className="text-white font-semibold text-lg">Drop your photo here</p>
-                    <p className="text-gray-300 text-base">or click to browse</p>
-                    <div className="flex items-center justify-center space-x-4 text-sm text-gray-400">
+                  <div className="space-y-4 text-center">
+                    <p className="text-white font-semibold text-xl font-poppins">Drop your photo here</p>
+                    <p className="text-gray-300 text-base font-inter">or click to browse</p>
+                    <div className="flex items-center justify-center space-x-4 text-sm text-gray-400 font-inter">
                       <span>JPG</span>
                       <span>•</span>
                       <span>PNG</span>
@@ -231,13 +230,13 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="space-y-3"
+              className="space-y-4"
             >
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-300">Analyzing...</span>
-                <span className="text-cyan-400 font-semibold">{Math.round(uploadProgress)}%</span>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300 font-inter">Analyzing...</span>
+                <span className="text-cyan-400 font-semibold font-poppins">{Math.round(uploadProgress)}%</span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
                 <motion.div
                   className="h-full bg-gradient-to-r from-cyan-400 to-pink-400 rounded-full"
                   initial={{ width: 0 }}
@@ -253,13 +252,13 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
         <motion.button
           onClick={handleUpload}
           disabled={isLoading || !file || !username.trim()}
-          className={`w-full py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 transform relative overflow-hidden ${
+          className={`w-full py-5 px-8 rounded-2xl font-bold text-lg transition-all duration-300 transform relative overflow-hidden ${
             isLoading || !file || !username.trim()
               ? "bg-gray-600 cursor-not-allowed opacity-50"
-              : "btn-neon text-white hover:scale-105 shadow-lg hover:shadow-cyan-400/25"
-          } flex items-center justify-center space-x-3`}
+              : "btn-neon text-white hover:scale-[1.02] shadow-lg hover:shadow-cyan-400/25"
+          } flex items-center justify-center space-x-4 font-poppins`}
           variants={itemVariants}
-          whileHover={!isLoading && file && username.trim() ? { scale: 1.05 } : {}}
+          whileHover={!isLoading && file && username.trim() ? { scale: 1.02 } : {}}
           whileTap={!isLoading && file && username.trim() ? { scale: 0.95 } : {}}
         >
           <AnimatePresence mode="wait">
@@ -269,7 +268,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex items-center space-x-3"
+                className="flex items-center space-x-4"
               >
                 <Loader className="w-6 h-6 animate-spin" />
                 <span>Analyzing your beauty...</span>
@@ -281,7 +280,7 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex items-center space-x-3"
+                className="flex items-center space-x-4"
               >
                 <Sparkles className="w-6 h-6" />
                 <span>Predict My Beauty Score!</span>
@@ -293,14 +292,14 @@ export default function UploadBox({ setScore, isLoading, setIsLoading }) {
 
         {/* Pro Tips */}
         <motion.div 
-          className="glass-card-pink rounded-xl p-4"
+          className="glass-card-pink rounded-xl p-6"
           variants={itemVariants}
         >
-          <div className="flex items-start space-x-3">
-            <Zap className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-white font-semibold text-sm mb-1">Pro Tips:</p>
-              <p className="text-gray-300 text-xs leading-relaxed">
+          <div className="flex items-start space-x-4">
+            <Zap className="w-6 h-6 text-yellow-400 mt-1 flex-shrink-0" />
+            <div className="space-y-2">
+              <p className="text-white font-semibold text-base font-poppins">Pro Tips:</p>
+              <p className="text-gray-300 text-sm leading-relaxed font-inter">
                 Use good lighting, face the camera directly, and smile naturally for best results!
               </p>
             </div>

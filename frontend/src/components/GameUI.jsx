@@ -78,23 +78,23 @@ export default function GameUI({ score }) {
 
   return (
     <motion.div 
-      className="space-y-6"
+      className="w-full max-w-md space-y-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Achievement Badge */}
       <motion.div 
-        className="glass-card rounded-3xl p-6 text-center shadow-xl relative overflow-hidden"
+        className="glass-card rounded-3xl p-8 text-center shadow-xl relative overflow-hidden"
         variants={itemVariants}
-        whileHover={{ scale: 1.02 }}
+        whileHover={{ scale: 1.01 }}
       >
         {/* Background gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${achievement.bgGradient} opacity-10 gradient-shift`}></div>
+        <div className={`absolute inset-0 bg-gradient-to-br ${achievement.bgGradient} opacity-5 gradient-shift`}></div>
         
         <div className="relative z-10">
           <motion.div 
-            className={`bg-gradient-to-r ${achievement.bgGradient} w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
+            className={`bg-gradient-to-r ${achievement.bgGradient} w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg`}
             animate={{
               rotate: [0, 10, -10, 0],
               scale: [1, 1.1, 1],
@@ -105,34 +105,34 @@ export default function GameUI({ score }) {
               ease: "easeInOut"
             }}
           >
-            <IconComponent className="w-8 h-8 text-white" />
+            <IconComponent className="w-10 h-10 text-white" />
           </motion.div>
           
-          <h3 className={`text-xl font-bold ${achievement.color} mb-2 gradient-text-neon`}>
+          <h3 className={`text-xl font-bold ${achievement.color} mb-3 gradient-text-neon font-poppins`}>
             {achievement.title}
           </h3>
-          <p className="text-gray-300 text-sm mb-4">{achievement.subtitle}</p>
+          <p className="text-gray-300 text-sm mb-6 font-inter">{achievement.subtitle}</p>
           
-          <div className="glass-card-pink rounded-full px-4 py-2 inline-block">
-            <span className="text-xs font-bold text-white">LEVEL: {achievement.level}</span>
+          <div className="glass-card-pink rounded-full px-6 py-3 inline-block">
+            <span className="text-sm font-bold text-white font-poppins">LEVEL: {achievement.level}</span>
           </div>
         </div>
       </motion.div>
 
       {/* Progress Section */}
       <motion.div 
-        className="glass-card rounded-2xl p-6 shadow-xl"
+        className="glass-card rounded-2xl p-8 shadow-xl"
         variants={itemVariants}
       >
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-3">
             <TrendingUp className="w-5 h-5 text-cyan-400" />
-            <span className="text-white font-semibold">Beauty Journey</span>
+            <span className="text-white font-semibold font-poppins">Beauty Journey</span>
           </div>
-          <span className="text-cyan-400 font-bold">{Math.round(achievement.progress)}%</span>
+          <span className="text-cyan-400 font-bold font-poppins text-lg">{Math.round(achievement.progress)}%</span>
         </div>
         
-        <div className="w-full bg-white/10 rounded-full h-4 mb-3 overflow-hidden">
+        <div className="w-full bg-white/10 rounded-full h-4 mb-4 overflow-hidden">
           <motion.div
             className={`h-full bg-gradient-to-r ${achievement.bgGradient} rounded-full relative`}
             initial={{ width: 0 }}
@@ -145,43 +145,43 @@ export default function GameUI({ score }) {
         
         {achievement.nextLevel && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-400">Current: {achievement.level}</span>
-            <span className="text-gray-300">Next: {achievement.nextLevel}</span>
+            <span className="text-gray-400 font-inter">Current: {achievement.level}</span>
+            <span className="text-gray-300 font-inter">Next: {achievement.nextLevel}</span>
           </div>
         )}
       </motion.div>
 
       {/* Stats Cards */}
       <motion.div 
-        className="grid grid-cols-2 gap-4"
+        className="grid grid-cols-2 gap-6"
         variants={itemVariants}
       >
         <motion.div 
-          className="glass-card rounded-xl p-4 text-center"
-          whileHover={{ scale: 1.05 }}
+          className="glass-card rounded-xl p-6 text-center"
+          whileHover={{ scale: 1.02 }}
         >
-          <Target className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
-          <p className="text-white font-semibold text-sm mb-1">Accuracy</p>
-          <p className="text-cyan-400 font-bold text-lg">98.5%</p>
+          <Target className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
+          <p className="text-white font-semibold text-sm mb-2 font-poppins">Accuracy</p>
+          <p className="text-cyan-400 font-bold text-xl font-poppins">98.5%</p>
         </motion.div>
         
         <motion.div 
-          className="glass-card rounded-xl p-4 text-center"
-          whileHover={{ scale: 1.05 }}
+          className="glass-card rounded-xl p-6 text-center"
+          whileHover={{ scale: 1.02 }}
         >
-          <Zap className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-          <p className="text-white font-semibold text-sm mb-1">AI Power</p>
-          <p className="text-pink-400 font-bold text-lg">MAX</p>
+          <Zap className="w-8 h-8 text-pink-400 mx-auto mb-3" />
+          <p className="text-white font-semibold text-sm mb-2 font-poppins">AI Power</p>
+          <p className="text-pink-400 font-bold text-xl font-poppins">MAX</p>
         </motion.div>
       </motion.div>
 
       {/* Motivational Message */}
       <motion.div 
-        className="text-center"
+        className="text-center pt-4"
         variants={itemVariants}
       >
         <motion.p 
-          className="text-white/90 text-lg font-medium drop-shadow-lg gradient-text-cyber"
+          className="text-white/90 text-lg font-medium drop-shadow-lg gradient-text-cyber font-poppins"
           animate={{
             opacity: [0.8, 1, 0.8],
           }}
