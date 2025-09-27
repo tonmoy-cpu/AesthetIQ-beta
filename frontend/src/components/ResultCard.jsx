@@ -37,7 +37,10 @@ export default function ResultCard({ score, imageFile }) {
   }, [score]);
 
   const handleGeminiAnalysis = () => {
-    console.log("🔍 Opening Gemini Analysis with imageFile:", !!imageFile);
+    console.log("🔍 Opening Gemini Analysis...");
+    console.log("📁 ImageFile available:", !!imageFile);
+    console.log("📁 ImageFile type:", imageFile?.type);
+    console.log("📁 ImageFile name:", imageFile?.name);
     setShowGeminiAnalysis(true);
   };
 
@@ -45,6 +48,7 @@ export default function ResultCard({ score, imageFile }) {
     console.log("❌ Closing Gemini Analysis");
     setShowGeminiAnalysis(false);
   };
+
   const getReaction = () => {
     if (score >= 4.5) return {
       text: "👑 ABSOLUTE ROYALTY! You're stunning! 🔥",
@@ -189,7 +193,12 @@ export default function ResultCard({ score, imageFile }) {
           {/* Gemini Analysis Button */}
           <button
             onClick={handleGeminiAnalysis}
-            className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg text-sm sm:text-base"
+            disabled={!imageFile}
+            className={`w-full font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 sm:space-x-3 shadow-lg text-sm sm:text-base ${
+              !imageFile 
+                ? "bg-gray-400 cursor-not-allowed opacity-50 text-white" 
+                : "bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white"
+            }`}
           >
             <Brain className="w-5 h-5 sm:w-6 sm:h-6" />
             <span>Analyze with Gemini AI</span>
@@ -207,13 +216,14 @@ export default function ResultCard({ score, imageFile }) {
         </div>
       </div>
 
-      {/* Gemini Analysis Modal */}
-      {showGeminiAnalysis && (
+      {/* Gemini Analysis Modal - This should render outside the main card */}
+      {showGeminiAnalysis && imageFile && (
         <GeminiAnalysis
           imageFile={imageFile}
           onClose={handleCloseGeminiAnalysis}
         />
       )}
+      
     </>
   );
 }

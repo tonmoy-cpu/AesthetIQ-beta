@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, Loader, AlertCircle } from "lucide-react";
 import axios from "axios";
-import ReactMarkdown from "react-markdown";
 
 export default function GeminiAnalysis({ imageFile, onClose }) {
   const [analysis, setAnalysis] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  console.log("🔧 GeminiAnalysis component rendered");
+  console.log("📁 ImageFile in component:", !!imageFile);
 
   const analyzeWithGemini = async () => {
     console.log("🔍 Starting Gemini analysis...");
@@ -54,64 +56,123 @@ export default function GeminiAnalysis({ imageFile, onClose }) {
     if (imageFile) analyzeWithGemini();
   }, [imageFile]);
 
-  return createPortal(
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[9999]">
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Beauty Analysis</h2>
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
-              disabled={isLoading}
-            >
-              <X size={24} />
-            </button>
-          </div>
+  // Simple inline styles to ensure visibility
+  const overlayStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '16px',
+    zIndex: 999999,
+  };
 
+  const modalStyle = {
+    backgroundColor: 'white',
+    borderRadius: '16px',
+    width: '100%',
+    maxWidth: '640px',
+    maxHeight: '90vh',
+    overflowY: 'auto',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  };
+
+  const headerStyle = {
+    padding: '24px',
+    borderBottom: '1px solid #e5e7eb',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  };
+
+  const contentStyle = {
+    padding: '24px',
+  };
+
+  return createPortal(
+    <div style={overlayStyle}>
+      <div style={modalStyle}>
+        <div style={headerStyle}>
+          <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#111827' }}>
+            Beauty Analysis
+          </h2>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#6b7280',
+              padding: '4px',
+            }}
+            disabled={isLoading}
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <div style={contentStyle}>
           {isLoading ? (
-            <div className="text-center py-12">
+            <div style={{ textAlign: 'center', padding: '48px 0' }}>
               <Loader className="w-12 h-12 mx-auto mb-4 animate-spin text-purple-500" />
-              <p className="text-gray-600">Analyzing your photo...</p>
+              <p style={{ color: '#4b5563', margin: 0 }}>Analyzing your photo...</p>
             </div>
           ) : error ? (
-            <div className="bg-red-50 p-4 rounded-lg text-red-700">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="w-5 h-5" />
-                <h3 className="font-semibold">Error</h3>
+            <div style={{
+              backgroundColor: '#fef2f2',
+              padding: '16px',
+              borderRadius: '8px',
+              color: '#b91c1c'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <AlertCircle size={20} />
+                <h3 style={{ margin: 0, fontWeight: '600' }}>Error</h3>
               </div>
-              <p>{error}</p>
+              <p style={{ margin: '0 0 16px 0' }}>{error}</p>
               <button
                 onClick={analyzeWithGemini}
-                className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                style={{
+                  backgroundColor: '#9333ea',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
               >
                 Try Again
               </button>
             </div>
           ) : analysis ? (
-            <div className="space-y-4">
-              {/* Simple direct rendering for debugging visibility */}
-              {typeof analysis === 'string' ? (
-                <div className="bg-gray-50 p-4 rounded-lg border border-purple-200">
-                  <h3 className="font-semibold text-lg mb-2 text-purple-700">Gemini Suggestions</h3>
-                  <pre className="whitespace-pre-wrap text-gray-800 text-base">
-                    {analysis}
-                  </pre>
+            <div>
+              <div style={{
+                backgroundColor: '#f9fafb',
+                padding: '16px',
+                borderRadius: '8px',
+                border: '1px solid #d1d5db'
+              }}>
+                <h3 style={{ 
+                  margin: '0 0 12px 0', 
+                  fontSize: '18px', 
+                  fontWeight: '600', 
+                  color: '#7c3aed' 
+                }}>
+                  Gemini AI Suggestions
+                </h3>
+                <div style={{
+                  whiteSpace: 'pre-wrap',
+                  color: '#374151',
+                  lineHeight: '1.6',
+                  fontSize: '15px'
+                }}>
+                  {analysis}
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {formatAnalysis(analysis).map((section, index) => (
-                    <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-semibold text-lg mb-2 text-purple-700">
-                        {section.title}
-                      </h3>
-                      <div className="whitespace-pre-wrap text-gray-700">
-                        {section.content}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              </div>
             </div>
           ) : null}
         </div>
