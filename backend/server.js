@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ["http://localhost:5173", "https://aesthetiq123.vercel.app", "http://192.168.0.172:5173","https://aesthetiq-deploy.vercel.app"],
+  origin: ["http://localhost:5173","https://aesthetiq-deploy.vercel.app"],
   credentials: true
 }));
 app.use(express.json());
