@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Camera, Sparkles, Trophy, Star, Users, Brain, Zap, 
-  Upload, Image, Cpu, Wand2, Target, Award, Crown,
-  ChevronDown, Play, Pause
-} from "lucide-react";
+import { Camera, Sparkles, Trophy, Star, Users, Brain, Zap, Upload, Image, Cpu, Wand as Wand2, Target, Award, Crown, ChevronDown, Play, Pause } from "lucide-react";
 import UploadBox from "../components/UploadBox";
 import ResultCard from "../components/ResultCard";
 import GameUI from "../components/GameUI";

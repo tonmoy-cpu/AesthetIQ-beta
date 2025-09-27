@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, Loader, Sparkles, Upload, Image, Zap, CheckCircle, AlertCircle } from "lucide-react";
+import { Camera, Loader, Sparkles, Upload, Image, Zap, CircleCheck as CheckCircle, CircleAlert as AlertCircle } from "lucide-react";
 import axios from "axios";
 
 export default function UploadBox({ setScore, isLoading, setIsLoading }) {
