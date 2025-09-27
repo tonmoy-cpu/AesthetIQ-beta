@@ -32,9 +32,12 @@ router.post("/analyze", upload.single("image"), async (req, res) => {
     const imageData = fs.readFileSync(filePath);
     const base64Image = imageData.toString("base64");
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Use a model that your API key supports
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash"
+    });
 
-    const prompt = `Analyze this photo and provide beauty enhancement suggestions. Focus on:
+    const prompt = `Analyze this photo in a summary and provide beauty enhancement suggestions under 100 words. Focus on:
     1. Skincare recommendations
     2. Makeup tips
     3. Hairstyle suggestions
@@ -50,26 +53,28 @@ router.post("/analyze", upload.single("image"), async (req, res) => {
       },
     };
 
-    console.log("🤖 Sending image to Gemini AI...");
+    console.log("🤖 Sending image to Gemini AI (gemini-2.5-flash)...");
 
     const result = await model.generateContent([
       { text: prompt },
       imagePart,
     ]);
 
-    // ✅ Fix: extract directly from result
-    const suggestions =
-      result.response?.text() ||
-      result.response?.candidates?.[0]?.content?.parts?.map(p => p.text).join("\n") ||
-      "No insights found.";
+    let suggestions = "No insights found.";
+    if (typeof result?.response?.text === "function") {
+      suggestions = result.response.text();
+    } else if (result?.response?.candidates?.[0]?.content?.parts) {
+      suggestions = result.response.candidates[0].content.parts
+        .map(p => p.text || "")
+        .join("\n");
+    }
 
-    // Cleanup
+    // Clean up the uploaded file
     fs.unlinkSync(filePath);
 
     console.log("✅ Gemini AI analysis complete");
     console.log("📝 Gemini suggestions:", suggestions);
 
-    // Ensure we're sending a proper response structure
     res.json({
       suggestions,
       message: "Analysis complete!",
@@ -85,7 +90,7 @@ router.post("/analyze", upload.single("image"), async (req, res) => {
     res.status(500).json({
       error: "Analysis failed. Please try again!",
       details: err.message,
-      success: false
+      success: false,
     });
   }
 });
